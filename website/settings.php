@@ -14,6 +14,7 @@ include __DIR__."/includes/requireadmin.inc.php";
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/no_link_style.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>
   </head>
 
   <body>

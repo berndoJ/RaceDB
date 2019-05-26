@@ -324,3 +324,9 @@ ul.horizontal_right_ul li {
   float: right;
   margin: 15px 5px;
 }
+
+#main_logo {
+  width: 177px;
+  height: 44px;
+  margin: 15px;
+}

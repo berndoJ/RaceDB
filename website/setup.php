@@ -19,6 +19,7 @@ if ($config->get("setup.complete") == TRUE)
     <title>KK Time Database Setup</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>
   </head>
 
   <body>
