@@ -1,0 +1,326 @@
+body {
+    font-family: Segoe UI;
+    margin: 0;
+}
+
+/* Default containers */
+
+/* Default website container */
+.stdcontainer {
+    width: 85%;
+    margin: auto auto 50px auto;
+    overflow: hidden;
+}
+
+/* Narrow website container */
+.narrowcontainer {
+    width: 40%;
+    margin: auto auto 50px auto;
+    overflow: hidden;
+}
+
+/* Infobox (blue) */
+.infobox {
+    border-style: hidden hidden hidden solid;
+    border-width: 5px;
+    border-color: #1A8CFF;
+    background: #CCE6FF;
+    padding: 10px 15px 10px 15px;
+    margin: 10px 0px 10px 0px;
+}
+
+/* Error box (red) */
+.errorbox {
+    border-style: hidden hidden hidden solid;
+    border-width: 5px;
+    border-color: #FF3333;
+    background: #FFCCCC;
+    padding: 10px 15px 10px 15px;
+    margin: 10px 0px 10px 0px;
+}
+
+/* Default box (gray) */
+.stdbox {
+    border-style: hidden hidden hidden solid;
+    border-width: 5px;
+    border-color: #BFBFBF;
+    background: #F2F2F2;
+    padding: 10px 15px 10px 15px;
+    margin: 10px 0px 10px 0px;
+}
+
+/* Success box (green) */
+.successbox {
+    border-style: hidden hidden hidden solid;
+    border-width: 5px;
+    border-color: #70DB70;
+    background: #D6F5D6;
+    padding: 10px 15px 10px 15px;
+    margin: 10px 0px 10px 0px;
+}
+
+/* Selectionbox */
+
+.selectionbox {
+    border-style: hidden hidden hidden solid;
+    border-width: 5px;
+    border-color: #F2F2F2;
+    background: #FBFBFB;
+    padding: 10px 15px 10px 15px;
+    margin: 10px 0px 10px 0px;
+}
+
+.selectionbox p {
+    cursor: pointer;
+}
+
+.selectionbox:hover {
+    border-style: hidden hidden hidden solid;
+    border-width: 5px;
+    border-color: #1A8CFF;
+    background: #F8F8F8;
+    padding: 10px 15px 10px 15px;
+    margin: 10px 0px 10px 0px;
+}
+
+/* Header */
+
+header {
+    background: #F4F4F4;
+    padding-top: 15px;
+}
+
+header img {
+    margin: 0;
+    height: 100px;
+}
+
+header h1 {
+    margin: 25px 0 25px 0;
+    padding: 0;
+    font-size: 30px;
+}
+
+header td a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Default custom button style */
+
+button {
+    border: none;
+    background-color: #4DA6FF;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 10px 30px 10px 30px;
+    margin: 0;
+    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s; /* Added for Webkit support */
+}
+
+button:hover {
+    background-color: #3399FF;
+}
+
+button:active {
+    background-color: #0073E6;
+}
+
+/*Default table class*/
+table.deftable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.deftable td, table.deftable th {
+  border: 1px solid #CCCCCC;
+  text-align: left;
+  padding: 8px;
+}
+
+table.deftable tr:nth-child(even) {
+  background-color: #EEEEEE;
+}
+
+table.deftable tr:nth-child(odd) {
+  background-color: #FEFEFE;
+}
+
+table.deftable ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+table.deftable li {
+  display: inline;
+  float: right;
+  margin: 0px 5px 0px 0px;
+}
+
+table.deftable a {
+  margin: 0px 5px 0px 5px;
+}
+
+table.deftable a:link, table.deftable a:visited {
+  color: #0066FF;
+  background-color: transparent;
+}
+
+table.deftable a:hover {
+  color: #0052CC;
+  background-color: transparent;
+}
+
+table.deftable a:active {
+  color: #0047B3;
+  background-color: transparent;
+}
+
+/*Modal window*/
+.defmodal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.defmodal-content {
+  position: relative;
+  background-color: #FEFEFE;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+.defmodal-header {
+  padding: 2px 16px;
+  background-color: #999999;
+  color: white;
+}
+
+.defmodal-body {
+  padding: 2px 16px;
+}
+
+.defmodal-footer {
+  padding: 2px 16px;
+  background-color: #EEEEEE;
+  color: white;
+}
+
+.defmodal .defmodal-closebtn {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.defmodal .defmodal-closebtn:hover, .defmodal .defmodal-closebtn:focus {
+  color: #222222;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*Logout section style*/
+#logout_section ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#logout_section li {
+  float: right;
+  line-height: 50px;
+}
+
+#logout_section li p {
+  margin: 0px 10px 0px 10px;
+}
+
+/* Default custom input field style*/
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Button-similar link */
+a.buttonlink, a.buttonlink:link, a.buttonlink:visited, a.buttonlink:active {
+    border: none;
+    background-color: #4DA6FF;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 29px 9px 29px;
+    margin: 0;
+}
+
+a.buttonlink:hover {
+  background-color: #3399FF;
+}
+
+/* Horizontal unordered list */
+ul.horizontal_ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul.horizontal_ul li {
+  display: inline-block;
+  margin: 0px 5px;
+}
+
+/* Horizontal unordered list aligned right*/
+ul.horizontal_right_ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+ul.horizontal_right_ul li {
+  float: right;
+  margin: 15px 5px;
+}
