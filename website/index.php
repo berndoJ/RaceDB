@@ -58,11 +58,13 @@ include __DIR__."/includes/requirelogin.inc.php";
           </div>
         </a>
 
-        <div class="selectionbox">
-          <p>
-            <b>Läufe und Staffeln bearbeiten</b>
-          </p>
-        </div>
+        <a href="./edit_runs.php">
+          <div class="selectionbox">
+            <p>
+              <b>Läufe und Staffeln bearbeiten</b>
+            </p>
+          </div>
+        </a>
 
         <div class="selectionbox">
           <p>

@@ -5,7 +5,7 @@ if len(sys.argv) >= 2:
     if sys.argv[1] == "test":
         print("Entering test mode...");
 
-        print("Writing version PHP file...")
+        """print("Writing version PHP file...")
 
         verfile = open("./../website/version/verinfo.txt","r")
 
@@ -15,7 +15,7 @@ if len(sys.argv) >= 2:
 
         verphpfile = open("./../website/version/verinfo.php", "w+")
         verphpfile.write("<?php\n$VER_MAIN = "+verinfo[0]+";\n$VER_MAJOR = "+verinfo[1]+";\n$VER_MINOR = "+verinfo[2]+";\n$VER_BUILD = "+verinfo[3]+";\n?>");
-        verphpfile.close()
+        verphpfile.close()"""
 
         if len(sys.argv) >= 3 and sys.argv[2] == "xampp":
             print("Testing code using XAMPP.\nSyncing xampp directory...")

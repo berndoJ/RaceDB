@@ -33,6 +33,11 @@ if (isset($_POST["createuser-submit"]))
   $password_verify = $_POST["createuser-password-confirm"];
   $permission_level_str = $_POST["createuser-permissionlevel"];
 
+  $username = isset($username) ? trim($username) : false;
+  $password = isset($password) ? trim($password) : false;
+  $password_verify = isset($password_verify) ? trim($password_verify) : false;
+  $permission_level_str = isset($permission_level_str) ? trim($permission_level_str) : false;
+
   if (empty($username) || empty($password) || empty($password_verify) || empty($permission_level_str))
   {
     header("Location: ../create_user.php?error=empty_fields");

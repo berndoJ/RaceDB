@@ -95,7 +95,7 @@ if (isset($_SESSION["username"]))
 
         <div class="stdbox">
           <form action="actions/login.act.php" method="post">
-            <h1>KK Time Database Login</h1>
+            <h1>RaceDB Login</h1>
             <p>
               Benutzername <br/>
               <input type="text" name="login-username" placeholder="Benutzername"/>
