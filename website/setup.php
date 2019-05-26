@@ -16,7 +16,7 @@ if ($config->get("setup.complete") == TRUE)
 <html>
 
   <head>
-    <title>KK Time Database Setup</title>
+    <title>RaceDB Setup</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>
@@ -33,9 +33,9 @@ if ($config->get("setup.complete") == TRUE)
     <section id="login_section">
       <div class="narrowcontainer">
         <div class="stdbox">
-          <h1>KK Time Database Setup</h1>
+          <h1>RaceDB Setup</h1>
           <p>
-            Willkommen im KK Time Database Setup. Bitte geben Sie in den folgenden
+            Willkommen im RaceDB Setup. Bitte geben Sie in den folgenden
             Feldern die Zugangsdaten zur My-SQL Datenbank an. Das Setup wird danach
             automatisch die benötigte Tabellenstruktur sowie den Standardbenutzer
             <i>admin</i> mit dem Password <i>admin</i> anlegen.

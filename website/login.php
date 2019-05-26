@@ -15,7 +15,7 @@ if (isset($_SESSION["username"]))
 <html>
 
   <head>
-    <title>KK Time Database Login</title>
+    <title>RaceDB - Login</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/login.css" />

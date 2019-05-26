@@ -9,7 +9,7 @@ include __DIR__."/includes/phpheader.inc.php";
 <html>
 
   <head>
-    <title>KK Time Database - Login Required</title>
+    <title>RaceDB - Login Required</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>

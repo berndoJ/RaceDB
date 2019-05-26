@@ -10,7 +10,7 @@ include __DIR__."/includes/requireadmin.inc.php";
 <html>
 
   <head>
-    <title>KK Time Database - Neuen Benutzer Erstellen</title>
+    <title>RaceDB - Neuen Benutzer Erstellen</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>

@@ -10,7 +10,7 @@ include __DIR__."/includes/requireadmin.inc.php";
 <html>
 
   <head>
-    <title>KK Time Database - Benutzermanagement</title>
+    <title>RaceDB - Benutzermanagement</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/no_link_style.css" />

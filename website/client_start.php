@@ -10,7 +10,7 @@ include __DIR__."/includes/requirelogin.inc.php";
 <html>
 
   <head>
-    <title>KK Time Database - Laufstart Client</title>
+    <title>RaceDB - Laufstart Client</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/custom_checkbox.css" />

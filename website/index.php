@@ -10,7 +10,7 @@ include __DIR__."/includes/requirelogin.inc.php";
 <html>
 
   <head>
-    <title>KK Time Database</title>
+    <title>RaceDB - Index</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/no_link_style.css" />
@@ -31,13 +31,7 @@ include __DIR__."/includes/requirelogin.inc.php";
       <div class="stdcontainer">
 
         <div class="infobox">
-          <p>KK Time Database Version
-            <b>
-              <?php
-              require __DIR__."/version/verinfo.php";
-              echo $VER_MAIN.".".$VER_MAJOR.".".$VER_MINOR." build ".$VER_BUILD
-              ?>
-            </b> (Copyright (c) 2019 by Johannes Berndorfer)</p>
+          <p>RaceDB Version 1.0 (Copyright (c) 2019 by Johannes Berndorfer)</p>
           <p>Deutsche Softwareversion</p>
         </div>
         <div class="stdbox">
