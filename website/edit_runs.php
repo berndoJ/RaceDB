@@ -13,7 +13,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
     <title>RaceDB - Läufe und Staffeln bearbeiten</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
-    <link rel="stylesheet" href="./css/custom_checkbox.css" />
+    <link rel="stylesheet" href="./css/no_link_style.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
     <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
@@ -90,6 +90,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                     // Click on the create run button
                     $("#button_create_run").click(function() {
                         $("#dialog_create_run_name").val("");
+                        $("#dialog_create_run_createbutton").prop("disabled", ($(this).val().trim().length == 0));
                         $("#dialog_create_run").show();
                     });
                 });
@@ -155,7 +156,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 ?>
                 <script type="application/javascript">
                     function delete_run_click(runid) {
-
+                        $("#dialog_delete_run_confirm").show();
                     }
 
                     function edit_run_click(runid) {
@@ -187,7 +188,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                     $("#dialog_create_run").hide();
                 });
                 // Attach change script for validating the user's input.
-                $("#dialog_create_run_name").change(function() {
+                $("#dialog_create_run_name").on("input", function() {
                     $("#dialog_create_run_createbutton").prop("disabled", ($(this).val().trim().length == 0));
                 });
                 // Create button
@@ -219,6 +220,55 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                     </li>
                     <li>
                         <button id="dialog_create_run_cancelbutton">Abbrechen</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!--Dialog for confirming the deletion of a run.-->
+    <div class="defmodal" id="dialog_delete_run_confirm">
+
+        <!--Script for handling clicking the buttons on the dialog-->
+        <script type="application/javascript">
+            $(window).on("load", function() {
+                // Close button
+                $("#dialog_delete_run_confirm_closebutton").click(function() {
+                    $("#dialog_delete_run_confirm").hide();
+                });
+                // Click outside the dialog bounds
+                $("#dialog_delete_run_confirm").click(function() {
+                    $("#dialog_delete_run_confirm").hide();
+                }).children().click(function(e) {
+                    e.stopPropagation();
+                });
+                // Cancel button
+                $("#dialog_delete_run_confirm_cancelbutton").click(function() {
+                    $("#dialog_delete_run_confirm").hide();
+                });
+                // Delete confirm button
+
+            });
+        </script>
+
+        <div class="defmodal-content">
+            <div class="defmodal-header">
+                <span class="defmodal-closebtn" id="dialog_delete_run_confirm_closebutton">&times;</span>
+                <h2>Lauf löschen?</h2>
+            </div>
+            <div class="defmodal-body">
+                <p>
+                    Soll der Lauf LAUFNAME wirklich <b>DAUERHAFT</b> gelöscht werden?
+                </p>
+            </div>
+            <div class="defmodal-footer">
+                <ul class="horizontal_right_ul">
+                    <li>
+                        <button id="dialog_delete_run_confirm_deletebutton">Löschen</button>
+                    </li>
+                    <li>
+                        <button id="dialog_delete_run_confirm_cancelbutton">Abbrechen</button>
                     </li>
                 </ul>
             </div>

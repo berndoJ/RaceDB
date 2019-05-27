@@ -1,131 +1,137 @@
 body {
-    font-family: Segoe UI;
-    margin: 0;
+  font-family: Segoe UI;
+  margin: 0;
 }
 
 /* Default containers */
 
 /* Default website container */
 .stdcontainer {
-    width: 85%;
-    margin: auto auto 50px auto;
-    overflow: hidden;
+  width: 85%;
+  margin: auto auto 50px auto;
+  overflow: hidden;
 }
 
 /* Narrow website container */
 .narrowcontainer {
-    width: 40%;
-    margin: auto auto 50px auto;
-    overflow: hidden;
+  width: 40%;
+  margin: auto auto 50px auto;
+  overflow: hidden;
 }
 
 /* Infobox (blue) */
 .infobox {
-    border-style: hidden hidden hidden solid;
-    border-width: 5px;
-    border-color: #1A8CFF;
-    background: #CCE6FF;
-    padding: 10px 15px 10px 15px;
-    margin: 10px 0px 10px 0px;
+  border-style: hidden hidden hidden solid;
+  border-width: 5px;
+  border-color: #1A8CFF;
+  background: #CCE6FF;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0px 10px 0px;
 }
 
 /* Error box (red) */
 .errorbox {
-    border-style: hidden hidden hidden solid;
-    border-width: 5px;
-    border-color: #FF3333;
-    background: #FFCCCC;
-    padding: 10px 15px 10px 15px;
-    margin: 10px 0px 10px 0px;
+  border-style: hidden hidden hidden solid;
+  border-width: 5px;
+  border-color: #FF3333;
+  background: #FFCCCC;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0px 10px 0px;
 }
 
 /* Default box (gray) */
 .stdbox {
-    border-style: hidden hidden hidden solid;
-    border-width: 5px;
-    border-color: #BFBFBF;
-    background: #F2F2F2;
-    padding: 10px 15px 10px 15px;
-    margin: 10px 0px 10px 0px;
+  border-style: hidden hidden hidden solid;
+  border-width: 5px;
+  border-color: #BFBFBF;
+  background: #F2F2F2;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0px 10px 0px;
 }
 
 /* Success box (green) */
 .successbox {
-    border-style: hidden hidden hidden solid;
-    border-width: 5px;
-    border-color: #70DB70;
-    background: #D6F5D6;
-    padding: 10px 15px 10px 15px;
-    margin: 10px 0px 10px 0px;
+  border-style: hidden hidden hidden solid;
+  border-width: 5px;
+  border-color: #70DB70;
+  background: #D6F5D6;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0px 10px 0px;
 }
 
 /* Selectionbox */
 
 .selectionbox {
-    border-style: hidden hidden hidden solid;
-    border-width: 5px;
-    border-color: #F2F2F2;
-    background: #FBFBFB;
-    padding: 10px 15px 10px 15px;
-    margin: 10px 0px 10px 0px;
+  border-style: hidden hidden hidden solid;
+  border-width: 5px;
+  border-color: #F2F2F2;
+  background: #FBFBFB;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0px 10px 0px;
 }
 
 .selectionbox p {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .selectionbox:hover {
-    border-style: hidden hidden hidden solid;
-    border-width: 5px;
-    border-color: #1A8CFF;
-    background: #F8F8F8;
-    padding: 10px 15px 10px 15px;
-    margin: 10px 0px 10px 0px;
+  border-style: hidden hidden hidden solid;
+  border-width: 5px;
+  border-color: #1A8CFF;
+  background: #F8F8F8;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0px 10px 0px;
 }
 
 /* Header */
 
 header {
-    background: #F4F4F4;
-    padding-top: 15px;
+  background: #F4F4F4;
+  padding-top: 15px;
 }
 
 header img {
-    margin: 0;
-    height: 100px;
+  margin: 0;
+  height: 100px;
 }
 
 header h1 {
-    margin: 25px 0 25px 0;
-    padding: 0;
-    font-size: 30px;
+  margin: 25px 0 25px 0;
+  padding: 0;
+  font-size: 30px;
 }
 
 header td a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 /* Default custom button style */
 
 button {
-    border: none;
-    background-color: #4DA6FF;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 10px 30px 10px 30px;
-    margin: 0;
-    transition-duration: 0.2s;
-    -webkit-transition-duration: 0.2s; /* Added for Webkit support */
+  border: none;
+  background-color: #4DA6FF;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 10px 30px 10px 30px;
+  margin: 0;
+  transition-duration: 0.2s;
+  -webkit-transition-duration: 0.2s;
+  /* Added for Webkit support */
 }
 
 button:hover {
-    background-color: #3399FF;
+  background-color: #3399FF;
 }
 
 button:active {
-    background-color: #0073E6;
+  background-color: #0073E6;
+}
+
+button:disabled,
+button[disabled] {
+  background-color: #999999;
 }
 
 /*Default table class*/
@@ -134,7 +140,8 @@ table.deftable {
   width: 100%;
 }
 
-table.deftable td, table.deftable th {
+table.deftable td,
+table.deftable th {
   border: 1px solid #CCCCCC;
   text-align: left;
   padding: 8px;
@@ -165,7 +172,8 @@ table.deftable a {
   margin: 0px 5px 0px 5px;
 }
 
-table.deftable a:link, table.deftable a:visited {
+table.deftable a:link,
+table.deftable a:visited {
   color: #0066FF;
   background-color: transparent;
 }
@@ -191,7 +199,7 @@ table.deftable a:active {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .defmodal-content {
@@ -201,7 +209,7 @@ table.deftable a:active {
   padding: 0;
   border: 1px solid #888;
   width: 80%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
@@ -209,13 +217,27 @@ table.deftable a:active {
 }
 
 @-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
+  from {
+    top: -300px;
+    opacity: 0
+  }
+
+  to {
+    top: 0;
+    opacity: 1
+  }
 }
 
 @keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
+  from {
+    top: -300px;
+    opacity: 0
+  }
+
+  to {
+    top: 0;
+    opacity: 1
+  }
 }
 
 .defmodal-header {
@@ -241,7 +263,8 @@ table.deftable a:active {
   font-weight: bold;
 }
 
-.defmodal .defmodal-closebtn:hover, .defmodal .defmodal-closebtn:focus {
+.defmodal .defmodal-closebtn:hover,
+.defmodal .defmodal-closebtn:focus {
   color: #222222;
   text-decoration: none;
   cursor: pointer;
@@ -267,34 +290,37 @@ table.deftable a:active {
 /* Default custom input field style*/
 
 input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 select {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 /* Button-similar link */
-a.buttonlink, a.buttonlink:link, a.buttonlink:visited, a.buttonlink:active {
-    border: none;
-    background-color: #4DA6FF;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 8px 29px 9px 29px;
-    margin: 0;
+a.buttonlink,
+a.buttonlink:link,
+a.buttonlink:visited,
+a.buttonlink:active {
+  border: none;
+  background-color: #4DA6FF;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 29px 9px 29px;
+  margin: 0;
 }
 
 a.buttonlink:hover {
