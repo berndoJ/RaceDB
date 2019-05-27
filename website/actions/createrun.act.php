@@ -66,12 +66,13 @@ if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
     header("Location: ../edit_runs.php?error=bad_sql");
     exit();
 }
-mysqli_stmt_bind_param($sql_stmt, "si", $name, 0);
+$def_run_active = 0;
+mysqli_stmt_bind_param($sql_stmt, "si", $name, $def_run_active);
 mysqli_stmt_execute($sql_stmt);
 
 // Close the database connection and redirect back to the origin site and display the success message.
 
 mysqli_close($db_conn);
 
-header("Location: ../edit_runs.php?success=create_run");
+header("Location: ../edit_runs.php?success=create_run&runname=".$name);
 exit();

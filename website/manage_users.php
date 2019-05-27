@@ -153,11 +153,13 @@ include __DIR__ . "/includes/requireadmin.inc.php";
                     function edit_user_click(user_id) {
                         edit_user_id = user_id;
                         $("#dialog_edit_user").show();
+                        
                         $.get("actions/get_username.act.php", {
                             userid: edit_user_id
                         }, function(data) {
                             $("#dialog_edit_user_username").text(data);
                         });
+
                         $.get("actions/get_user_permissionlevel.inc.php", {
                             userid: edit_user_id,
                             text: "set"

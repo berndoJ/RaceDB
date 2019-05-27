@@ -27,6 +27,61 @@ include __DIR__ . "/includes/requirelogin.inc.php";
 
     ?>
 
+    <section id="info_section">
+
+        <!-- Success information panel -->
+        <div class="stdcontainer">
+            <?php
+            if (isset($_GET["success"])) {
+                ?>
+                <div class="successbox">
+                    <h3>Information</h3>
+                    <p>
+                        <?php
+                        switch ($_GET["success"]) {
+                            case "create_run":
+                                echo "Der Lauf " . $_GET["runname"] . " wurde erfolgreich erstellt!";
+                                break;
+                            default:
+                                echo "Unbekannte Information.";
+                                break;
+                        }
+                        ?>
+                    </p>
+                </div>
+            <?php
+        }
+        ?>
+
+            <!-- Error information panel -->
+            <div class="stdcontainer">
+                <?php
+                if (isset($_GET["error"])) {
+                    ?>
+                    <div class="errorbox">
+                        <h3>Information</h3>
+                        <p>
+                            <?php
+                            switch ($_GET["error"]) {
+                                case "bad_sql":
+                                    echo "Ein interner SQL-Fehler ist aufgetreten. Bitte kontaktieren Sie den Webhost.";
+                                    break;
+                                case "name_taken":
+                                    echo "Ein Lauf mit diesem Namen existiert bereits.";
+                                    break;
+                                default:
+                                    echo "Unbekannte Information.";
+                                    break;
+                            }
+                            ?>
+                        </p>
+                    </div>
+                <?php
+            }
+            ?>
+
+    </section>
+
     <section id="run_section">
         <div class="stdcontainer">
             <h3>Läufe</h3>
@@ -34,7 +89,8 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 $(window).on("load", function() {
                     // Click on the create run button
                     $("#button_create_run").click(function() {
-
+                        $("#dialog_create_run_name").val("");
+                        $("#dialog_create_run").show();
                     });
                 });
             </script>
@@ -98,14 +154,13 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 }
                 ?>
                 <script type="application/javascript">
-                function delete_run_click(runid)
-                {
+                    function delete_run_click(runid) {
 
-                }
-                function edit_run_click(runid)
-                {
-                    
-                }
+                    }
+
+                    function edit_run_click(runid) {
+
+                    }
                 </script>
             </table>
         </div>
@@ -131,9 +186,17 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 $("#dialog_create_run_cancelbutton").click(function() {
                     $("#dialog_create_run").hide();
                 });
+                // Attach change script for validating the user's input.
+                $("#dialog_create_run_name").change(function() {
+                    $("#dialog_create_run_createbutton").prop("disabled", ($(this).val().trim().length == 0));
+                });
                 // Create button
                 $("#dialog_create_run_createbutton").click(function() {
-                    // TODO: Write js code for the createbutton
+                    runname = $("#dialog_create_run_name").val();
+                    if (runname.trim().length == 0) {
+                        return;
+                    }
+                    $('<form action=\"actions/createrun.act.php\" method=\"post\"><input type=\"hidden\" name=\"name\" value=\"' + runname + '\"/></form>').appendTo('body').submit();
                 });
             });
         </script>
