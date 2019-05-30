@@ -16,6 +16,8 @@ include __DIR__ . "/includes/requirelogin.inc.php";
     <link rel="stylesheet" href="./css/no_link_style.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
     <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="application/javascript" src="./js/std_server_responses.js"></script>
+    <script type="application/javascript" src="./js/std_notif_messages.js"></script>
 </head>
 
 <body>
@@ -25,62 +27,9 @@ include __DIR__ . "/includes/requirelogin.inc.php";
     include __DIR__ . "/header.php";
     include __DIR__ . "/includes/logout_ribbon.php";
 
+    include __DIR__ . "/notifications.php";
+
     ?>
-
-    <section id="info_section">
-
-        <!-- Success information panel -->
-        <div class="stdcontainer">
-            <?php
-            if (isset($_GET["success"])) {
-                ?>
-                <div class="successbox">
-                    <h3>Information</h3>
-                    <p>
-                        <?php
-                        switch ($_GET["success"]) {
-                            case "create_run":
-                                echo "Der Lauf " . $_GET["runname"] . " wurde erfolgreich erstellt!";
-                                break;
-                            default:
-                                echo "Unbekannte Information.";
-                                break;
-                        }
-                        ?>
-                    </p>
-                </div>
-            <?php
-        }
-        ?>
-
-            <!-- Error information panel -->
-            <div class="stdcontainer">
-                <?php
-                if (isset($_GET["error"])) {
-                    ?>
-                    <div class="errorbox">
-                        <h3>Information</h3>
-                        <p>
-                            <?php
-                            switch ($_GET["error"]) {
-                                case "bad_sql":
-                                    echo "Ein interner SQL-Fehler ist aufgetreten. Bitte kontaktieren Sie den Webhost.";
-                                    break;
-                                case "name_taken":
-                                    echo "Ein Lauf mit diesem Namen existiert bereits.";
-                                    break;
-                                default:
-                                    echo "Unbekannte Information.";
-                                    break;
-                            }
-                            ?>
-                        </p>
-                    </div>
-                <?php
-            }
-            ?>
-
-    </section>
 
     <section id="run_section">
         <div class="stdcontainer">
@@ -93,76 +42,62 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                         $("#dialog_create_run_createbutton").prop("disabled", ($(this).val().trim().length == 0));
                         $("#dialog_create_run").show();
                     });
+                    // Click on the deactivate all runs button
+                    $("#button_deactivate_all_runs").click(function() {
+                        $.post("actions/activate_run.act.php", {
+                            runid: -1
+                        }, function(data, status) {
+                            if (status != "success") {
+                                display_notification("error", NOTIFICATION_NO_CONNECTION);
+                                return;
+                            } else {
+                                update_runtable();
+                            }
+                        });
+                    });
                 });
             </script>
-            <button id="button_create_run" style="float: right; margin: 10px 0px;">Neuer Lauf</button>
-            <table class="deftable">
-                <tr>
-                    <th>
-                        Laufname
-                    </th>
-                    <th>
-                        Status
-                    </th>
-                    <th>
-                        Aktionen
-                    </th>
-                </tr>
-                <?php
-                // Fetch all runs from the database and present them to the user.
-                require_once __DIR__ . "/includes/db.inc.php";
-                $db_conn = open_db_connection();
-                if (!$db_conn) {
-                    echo "<tr><td>SQL error.</td></tr>";
-                } else {
-                    $sql_query = "SELECT * FROM runs;";
-                    $sql_stmt = mysqli_stmt_init($db_conn);
-                    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
-                        echo "<tr><td>SQL error.</td></tr>";
-                    } else {
-                        mysqli_stmt_execute($sql_stmt);
-                        $sql_result = mysqli_stmt_get_result($sql_stmt);
+            <ul class="horizontal_ul">
+                <button id="button_create_run" style="margin: 10px 5px 10px 0px;">Neuer Lauf</button>
+                <button id="button_deactivate_all_runs" style="margin: 10px 5px 10px 0px;">Alle Läufe Deaktivieren</button>
+            </ul>
 
-                        if (mysqli_num_rows($sql_result) < 1) {
-                            echo "<tr><td colspan=\"3\" style=\"text-align: center;\"><i>Es wurden keine Läufe erstellt.</i></td></tr>";
-                        } else {
-                            while ($sql_row = mysqli_fetch_assoc($sql_result)) {
-                                $run_active = $sql_row["active"] ? "<b>Aktiv</b>" : "Inaktiv";
+            <!--Runtable script-->
+            <script type="application/javascript">
+                $(window).on("load", function() {
+                    update_runtable();
+                });
 
-                                $table_html = "<tr><td>"
-                                    . $sql_row["name"]
-                                    . "</td><td>"
-                                    . $run_active
-                                    . "</td><td><ul><li><a onclick=\"delete_run_click("
-                                    . $sql_row["id"]
-                                    . ");\" href=\"#\">Löschen</a></li><li><a onclick=\"edit_run_click("
-                                    . $sql_row["id"]
-                                    . ");\" href=\"#\">Bearbeiten</a></li>";
-
-                                if ($sql_row["active"] != true) {
-                                    $table_html .=
-                                        "<li><a onclick=\"activate_run_click("
-                                        . $sql_row["id"]
-                                        . ");\" href=\"#\">Aktivieren</a></li>";
-                                }
-
-                                $table_html .= "</ul></td></tr>";
-
-                                echo $table_html;
-                            }
-                        }
-                    }
+                function update_runtable() {
+                    $.get("html_factories/runtable.fac.php", {}, function(data) {
+                        $("#runtable").html(data);
+                    });
                 }
-                ?>
-                <script type="application/javascript">
-                    function delete_run_click(runid) {
-                        $("#dialog_delete_run_confirm").show();
-                    }
 
-                    function edit_run_click(runid) {
+                function delete_run_click(runid) {
+                    delete_run_id = runid;
+                    $("#dialog_delete_run_confirm").show();
+                    $.get("actions/get_runname.act.php", {
+                        runid: delete_run_id
+                    }, function(data) {
+                        $("#dialog_delete_run_confirm_runname").text(data);
+                    });
+                }
 
-                    }
-                </script>
+                function edit_run_click(runid) {
+                    window.location.href = "edit_run.php?runid=" + runid;
+                }
+
+                function activate_run_click(runid) {
+                    $.post("actions/activate_run.act.php", {
+                        runid: runid
+                    }, function(data, status) {});
+                    window.location.href = "edit_runs.php";
+                }
+            </script>
+
+            <!--Runtable-->
+            <table class="deftable" id="runtable">
             </table>
         </div>
     </section>
@@ -197,7 +132,33 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                     if (runname.trim().length == 0) {
                         return;
                     }
-                    $('<form action=\"actions/createrun.act.php\" method=\"post\"><input type=\"hidden\" name=\"name\" value=\"' + runname + '\"/></form>').appendTo('body').submit();
+                    $.post("actions/create_run.act.php", {
+                        name: runname
+                    }, function(data, status) {
+                        if (status != "success") {
+                            display_notification("error", NOTIFICATION_NO_CONNECTION);
+                            return;
+                        } else {
+                            data_sec = data.split("\n");
+                            switch (data_sec[0]) {
+                                case RESPONSE_SUCCESS:
+                                    display_notification("success", "Der Lauf " + data_sec[1] + " wurde erfolgreich erstellt.");
+                                    break;
+                                case "ERR_NAME_TAKEN":
+                                    display_notification("error", "Es existiert bereits ein Lauf mit dem Namen " + data_sec[1] + ".");
+                                    break;
+                                case RESPONSE_ERROR_SQL_NO_CONNECTION:
+                                    display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
+                                    break;
+                                default:
+                                    display_notification_default(NOTIFICATION_UNKNOWN_RESPONSE);
+                                    console.log("Invalid response:\n" + data);
+                                    break;
+                            }
+                            update_runtable();
+                            $("#dialog_create_run").hide();
+                        }
+                    });
                 });
             });
         </script>
@@ -248,7 +209,32 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                     $("#dialog_delete_run_confirm").hide();
                 });
                 // Delete confirm button
-
+                $("#dialog_delete_run_confirm_deletebutton").click(function() {
+                    $.post("actions/delete_run.act.php", {
+                        runid: delete_run_id
+                    }, function(data, status) {
+                        if (status != "success") {
+                            display_notification("error", NOTIFICATION_NO_CONNECTION);
+                            return;
+                        } else {
+                            data_sec = data.split("\n");
+                            switch (data_sec[0]) {
+                                case RESPONSE_SUCCESS:
+                                    display_notification("success", "Der Lauf wurde erfolgreich gelöscht.");
+                                    break;
+                                case RESPONSE_ERROR_SQL_NO_CONNECTION:
+                                    display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
+                                    break;
+                                default:
+                                    display_notification_default(NOTIFICATION_UNKNOWN_RESPONSE);
+                                    console.log("Invalid response:\n" + data);
+                                    break;
+                            }
+                            update_runtable();
+                            $("#dialog_delete_run_confirm").hide();
+                        }
+                    });
+                });
             });
         </script>
 
@@ -259,7 +245,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
             </div>
             <div class="defmodal-body">
                 <p>
-                    Soll der Lauf LAUFNAME wirklich <b>DAUERHAFT</b> gelöscht werden?
+                    Soll der Lauf <span id="dialog_delete_run_confirm_runname">LAUFNAME</span> wirklich <b>DAUERHAFT</b> gelöscht werden?
                 </p>
             </div>
             <div class="defmodal-footer">

@@ -1,0 +1,80 @@
+<div>
+    <style>
+        .notification-panel {
+            z-index: 10;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .notification-panel ul {
+            margin: 0;
+            padding: 0;
+            float: right;
+            width: 35%;
+        }
+
+        .notification-panel ul div {
+            margin: 10px;
+            pointer-events: auto;
+        }
+
+        .notification-body {
+            padding: 20px;
+        }
+
+        .notification-body[type="error"] {
+            background-color: #f44336;
+            color: #ffffff;
+        }
+
+        .notification-body[type="info"] {
+            background-color: #0099ff;
+            color: #ffffff;
+        }
+
+        .notification-body[type="success"] {
+            background-color: #00cc00;
+            color: #ffffff;
+        }
+
+        .notification-closebutton {
+            margin-left: 15px;
+            color: #ffffff;
+            font-weight: bold;
+            float: right;
+            line-height: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .notification-closebutton:hover {
+            color: #000000;
+        }
+    </style>
+
+    <div class="notification-panel">
+        <ul></ul>
+    </div>
+</div>
+
+<script type="application/javascript">
+    var notification_template = `
+    <div class="notification-body" type="{type}" id="NOTIFICATION-{rnd}">
+        <span class="notification-closebutton" onclick="$(this).parent().remove();">&times;</span>
+        {text}
+        <script type="application/javascript">
+        setTimeout(function(){
+            $("#NOTIFICATION-{rnd}").remove();
+        }, 5000);
+        <\/script>
+    </div>`;
+
+    function display_notification(type, html) {
+        $(".notification-panel ul").append(notification_template.replace("{type}", type).replace("{text}", html).replace(/\{rnd\}/g, Math.floor(Math.random() * 10000000)));
+    }
+</script>

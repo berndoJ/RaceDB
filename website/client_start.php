@@ -70,7 +70,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 <script type="application/javascript">
                     $(window).on("load", function() {
                         setInterval(function() {
-                            $("#utc").text(new Date().getTime());
+                            $("#utc").text(Date.now());
                         }, 5);
                     });
                 </script>

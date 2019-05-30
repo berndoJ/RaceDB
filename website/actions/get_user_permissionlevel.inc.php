@@ -8,6 +8,11 @@ if (!isset($_SESSION["username"]))
   exit;
 }
 
+require_once __DIR__ . "/../includes/permissionlevel.inc.php";
+if ($_SESSION["permissionlevel"] < $_PERMISSION_LEVELS["manager"]) {
+    exit;
+}
+
 if (!isset($_GET["userid"]))
 {
   echo "n.a.";
