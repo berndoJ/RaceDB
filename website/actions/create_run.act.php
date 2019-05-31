@@ -4,13 +4,10 @@ require_once __DIR__ . "/../includes/msg.inc.php";
 
 // Check for authorisation. Minimum required permissionlevel: manager.
 session_start();
-
 if (!isset($_SESSION["permissionlevel"])) {
     exit(MSG_ERROR_NOT_LOGGED_IN);
 }
-
 $permission_level = $_SESSION["permissionlevel"];
-
 require_once __DIR__ . "/../includes/permissionlevel.inc.php";
 if ($permission_level < $_PERMISSION_LEVELS["manager"]) {
     exit(MSG_ERROR_INSUFFICIENT_PERMISSION);
