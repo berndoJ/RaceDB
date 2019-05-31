@@ -15,6 +15,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/custom_checkbox.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <link rel="stylesheet" href="./css/no_link_style.css" />
     <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="application/javascript" src="./js/std_server_responses.js"></script>
     <script type="application/javascript" src="./js/std_notif_messages.js"></script>
@@ -102,6 +103,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                         }, function(data) {
                             $("#relay_checkbox_div").html(data);
                         });
+                        update_recent_start_table();
                     }
                 </script>
 
@@ -134,8 +136,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                             relay_checks.push([this.id, this.checked]);
                         });
 
-                        for (i = 0; i < relay_checks.length; i++)
-                        {
+                        for (i = 0; i < relay_checks.length; i++) {
                             el = relay_checks[i];
                             if (el[1] == false) {
                                 continue;
@@ -152,11 +153,11 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                                     data_sec = data.split("\n");
                                     switch (data_sec[0]) {
                                         case RESPONSE_SUCCESS:
-                                        display_notification("success", "Die Staffel wurde gestartet.");
+                                            display_notification("success", "Die Staffel wurde gestartet.");
                                             break;
-                                        /*case "UTC_OUT_OF_SYNC":
-                                            display_notification("error", "Die Zeit des Clients ist nicht mit der Serverzeit synchronisiert. Um mögliche Zeitdifferenzfehler zu vermeiden und Staffeln zu starten, muss die Clientzeit mit der Serverzeit synchronisiert werden. (UTC)");
-                                            break;*/
+                                            /*case "UTC_OUT_OF_SYNC":
+                                                display_notification("error", "Die Zeit des Clients ist nicht mit der Serverzeit synchronisiert. Um mögliche Zeitdifferenzfehler zu vermeiden und Staffeln zu starten, muss die Clientzeit mit der Serverzeit synchronisiert werden. (UTC)");
+                                                break;*/
                                         case RESPONSE_ERROR_SQL_NO_CONNECTION:
                                             display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
                                             break;
@@ -171,6 +172,17 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                         }
                     }
                 </script>
+                <h3>Letzte Starts</h3>
+                <script type="application/javascript">
+                    function update_recent_start_table() {
+                        $.get("html_factories/recent_start_table.fac.php", {
+                            runid: runid
+                        }, function(data) {
+                            $("#recent_start_table").html(data);
+                        });
+                    }
+                </script>
+                <table class="deftable" id="recent_start_table"></table>
             </div>
         </section>
 
