@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Action script to get the name of the relay given by the relayid.
+ * Action script that starts a relay with the given relayid and UTC-constant.
  * 
  * Variables:
- * relayid
+ * relayid, utc
  */
 
 require_once __DIR__ . "/../includes/msg.inc.php";
@@ -20,16 +20,14 @@ if ($_SESSION["permissionlevel"] < $_PERMISSION_LEVELS["user"]) {
     exit(MSG_ERROR_INSUFFICIENT_PERMISSION);
 }
 
-if (!isset($_GET["relayid"])) {
+if (!isset($_POST["relayid"]) || !isset($_POST["utc"])) {
     exit(MSG_ERROR_VARIABLES_MISSING);
 }
 
-$relayid = $_GET["relayid"];
+$relayid = $_POST["relayid"];
+$utc = $_POST["utc"];
 
 require_once __DIR__ . "/../includes/utils.inc.php";
-$db_result = db_get_relayname_from_id($relayid);
+$db_result = db_start_relay($relayid, $utc);
 
-if ($db_result == false)
-    exit("n.a.");
-else
-    exit($db_result);
+exit($db_result);

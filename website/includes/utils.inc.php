@@ -106,6 +106,38 @@ function db_set_run_active($runid)
 }
 
 /**
+ * Gets the currently active run and returnes it's id.
+ * 
+ * If there is no currently active run, this function will return null. Because
+ * there is always the possibility of no currently active run, it has to be
+ * checked if this function returned null.
+ */
+function db_get_active_run()
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Run SQL query.
+    $sql_query = "SELECT id FROM runs WHERE active=1;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    if ($sql_row = mysqli_fetch_assoc($sql_result)) {
+        mysqli_close($db_conn);
+        return $sql_row["id"];
+    } else {
+        mysqli_close($db_conn);
+        return null;
+    }
+}
+
+/**
  * Gets the name of the user from the given userid.
  */
 function db_get_username_from_id($userid)
@@ -261,6 +293,32 @@ function db_modify_relay($relayid, $relayname = null)
 }
 
 /**
+ * Starts a relay specified by the given relayid at the time given by utc.
+ */
+function db_start_relay($relayid, $utc)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Add the startevent data row.
+    $sql_query = "INSERT INTO startevents (relayid, utc) VALUES (?, ?);";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "ii", $relayid, $utc);
+    mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
  * Gets the name of the relay given by the relayid.
  */
 function db_get_relayname_from_id($relayid)
@@ -323,8 +381,8 @@ function db_create_runner($relayid, $firstname, $surname, $runneruid)
     mysqli_free_result($sql_result);
 
     // Check if runner UID exists
-    $sql_query = 
-    "SELECT
+    $sql_query =
+        "SELECT
         rn.id AS runnerid
     FROM
         runners AS rn
@@ -488,7 +546,7 @@ function db_get_runner_info_from_id($runnerid)
     $sql_result = mysqli_stmt_get_result($sql_stmt);
     $result = MSG_ERROR_VARIABLES_INVALID;
     if ($sql_row = mysqli_fetch_assoc($sql_result)) {
-        $result = MSG_SUCCESS . "\n". $sql_row["firstname"] . "\n" . $sql_row["surname"] . "\n" . $sql_row["runneruid"] . "\n" . $sql_row["relayid"];
+        $result = MSG_SUCCESS . "\n" . $sql_row["firstname"] . "\n" . $sql_row["surname"] . "\n" . $sql_row["runneruid"] . "\n" . $sql_row["relayid"];
     }
     mysqli_free_result($sql_result);
     mysqli_close($db_conn);

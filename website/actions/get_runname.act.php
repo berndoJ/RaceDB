@@ -7,7 +7,7 @@ if (!isset($_SESSION["username"])) {
 }
 
 require_once __DIR__ . "/../includes/permissionlevel.inc.php";
-if ($_SESSION["permissionlevel"] < $_PERMISSION_LEVELS["manager"]) {
+if ($_SESSION["permissionlevel"] < $_PERMISSION_LEVELS["user"]) {
     exit;
 }
 
