@@ -323,12 +323,21 @@ function db_create_runner($relayid, $firstname, $surname, $runneruid)
     mysqli_free_result($sql_result);
 
     // Check if runner UID exists
-    $sql_query = "SELECT * FROM runners WHERE runneruid=? AND relayid=?";
+    $sql_query = 
+    "SELECT
+        rn.id AS runnerid
+    FROM
+        runners AS rn
+    INNER JOIN
+        relays AS rl
+        ON (rl.id = rn.relayid)
+    WHERE
+        rl.runid = (SELECT runid FROM relays WHERE id=?) AND rn.runneruid=?;";
     $sql_stmt = mysqli_stmt_init($db_conn);
     if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
         return MSG_ERROR_SQL_BAD_QUERY;
     }
-    mysqli_stmt_bind_param($sql_stmt, "si", $runneruid, $relayid);
+    mysqli_stmt_bind_param($sql_stmt, "is", $relayid, $runneruid);
     mysqli_stmt_execute($sql_stmt);
     $sql_result = mysqli_stmt_get_result($sql_stmt);
     if (mysqli_num_rows($sql_result) > 0) {
@@ -385,6 +394,68 @@ function db_delete_runner($runnerid)
     }
     mysqli_stmt_bind_param($sql_stmt, "i", $runnerid);
     mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
+ * Modifies the values of a runner given by the runnerid. If any property of the
+ * relay is set to "null", no changes will be conducted.
+ */
+function db_modify_runner($runnerid, $firstname = null, $surname = null, $runneruid = null, $relayid = null)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Modify the firstname.
+    if ($firstname != null) {
+        $sql_query = "UPDATE runners SET firstname=? WHERE id=?;";
+        $sql_stmt = mysqli_stmt_init($db_conn);
+        if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+            return MSG_ERROR_SQL_BAD_QUERY;
+        }
+        mysqli_stmt_bind_param($sql_stmt, "si", $firstname, $runnerid);
+        mysqli_stmt_execute($sql_stmt);
+    }
+
+    // Modify the surname.
+    if ($surname != null) {
+        $sql_query = "UPDATE runners SET surname=? WHERE id=?;";
+        $sql_stmt = mysqli_stmt_init($db_conn);
+        if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+            return MSG_ERROR_SQL_BAD_QUERY;
+        }
+        mysqli_stmt_bind_param($sql_stmt, "si", $surname, $runnerid);
+        mysqli_stmt_execute($sql_stmt);
+    }
+
+    // Modify the runneruid.
+    if ($runneruid != null) {
+        $sql_query = "UPDATE runners SET runneruid=? WHERE id=?;";
+        $sql_stmt = mysqli_stmt_init($db_conn);
+        if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+            return MSG_ERROR_SQL_BAD_QUERY;
+        }
+        mysqli_stmt_bind_param($sql_stmt, "si", $runneruid, $runnerid);
+        mysqli_stmt_execute($sql_stmt);
+    }
+
+    // Modify the relayid.
+    if ($relayid != null) {
+        $sql_query = "UPDATE runners SET relayid=? WHERE id=?;";
+        $sql_stmt = mysqli_stmt_init($db_conn);
+        if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+            return MSG_ERROR_SQL_BAD_QUERY;
+        }
+        mysqli_stmt_bind_param($sql_stmt, "ii", $relayid, $runnerid);
+        mysqli_stmt_execute($sql_stmt);
+    }
 
     // Close the database connection.
     mysqli_close($db_conn);

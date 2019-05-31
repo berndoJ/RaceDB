@@ -60,6 +60,7 @@ if (!isset($_GET["runid"])) {
                             $("#dialog_create_relay_createbutton").prop("disabled", ($("#dialog_create_relay_name").val().trim().length == 0));
                             $("#dialog_create_relay_name").val("");
                             $("#dialog_create_relay").show();
+                            $("#dialog_create_relay_name").focus();
                         });
                     });
 
@@ -93,9 +94,9 @@ if (!isset($_GET["runid"])) {
                             }, function(data) {
                                 $("#dialog_create_runner_relay").html(data);
                             });
-                            $("#dialog_create_runner_createbutton").prop("disabled", (!$("#dialog_create_runner_relay").val()));
 
                             $("#dialog_create_runner").show();
+                            $("#dialog_create_runner_firstname").focus();
                         });
                     });
 
@@ -226,6 +227,7 @@ if (!isset($_GET["runid"])) {
                     });
 
                     $("#dialog_edit_relay").show();
+                    $("#dialog_edit_relay_name").focus();
                 }
             </script>
 
@@ -585,6 +587,7 @@ if (!isset($_GET["runid"])) {
                     });
 
                     $("#dialog_edit_runner").show();
+                    $("#dialog_edit_runner_firstname").focus();
                 }
             </script>
 
@@ -650,6 +653,7 @@ if (!isset($_GET["runid"])) {
                         relayid = $("#dialog_edit_runner_relay").val();
 
                         $.post("actions/edit_runner.act.php", {
+                            runnerid: edit_runner_id,
                             relayid: relayid,
                             firstname: firstname,
                             surname: surname,
@@ -662,13 +666,7 @@ if (!isset($_GET["runid"])) {
                                 data_sec = data.split("\n");
                                 switch (data_sec[0]) {
                                     case RESPONSE_SUCCESS:
-                                        display_notification("success", "Der Läufer " + data_sec[1] + " " + data_sec[2] + " wurde erfolgreich hinzugefügt.");
-                                        break;
-                                    case "ERR_EXISTS":
-                                        display_notification("error", "Es existiert bereits ein Läufer mit dem Namen " + data_sec[1] + " " + data_sec[2] + " und der Läufer-UID " + data_sec[3] + ".");
-                                        break;
-                                    case "ERR_UID_EXISTS":
-                                        display_notification("error", "Es existiert bereits ein Läufer mit der angegebenen Läufer-UID. Diese muss innerhalb des Laufes eindeutig vergeben sein.");
+                                        display_notification("success", "Die Änderungen wurden erfolgreich gespeichert.");
                                         break;
                                     case RESPONSE_ERROR_SQL_NO_CONNECTION:
                                         display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
