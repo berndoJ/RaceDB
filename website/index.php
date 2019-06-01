@@ -1,7 +1,7 @@
 <?php
 
-include __DIR__."/includes/phpheader.inc.php";
-include __DIR__."/includes/requirelogin.inc.php";
+include __DIR__ . "/includes/phpheader.inc.php";
+include __DIR__ . "/includes/requirelogin.inc.php";
 
 ?>
 
@@ -9,99 +9,102 @@ include __DIR__."/includes/requirelogin.inc.php";
 
 <html>
 
-  <head>
-    <title>RaceDB - Index</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="./css/defstyle.css" />
-    <link rel="stylesheet" href="./css/no_link_style.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>
-  </head>
+<head>
+  <title>RaceDB - Index</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./css/defstyle.css" />
+  <link rel="stylesheet" href="./css/no_link_style.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+</head>
 
-  <body>
+<body>
 
-    <?php
-    // Website Header
-    include __DIR__."/header.php";
+  <?php
+  // Website Header
+  include __DIR__ . "/header.php";
 
-    include __DIR__."/includes/logout_ribbon.php";
+  include __DIR__ . "/includes/logout_ribbon.php";
 
-    ?>
+  ?>
 
-    <section id="info_section">
-      <div class="stdcontainer">
+  <section id="info_section">
+    <div class="stdcontainer">
 
-        <div class="infobox">
-          <p>RaceDB Version 1.0 (Copyright (c) 2019 by Johannes Berndorfer)</p>
-          <p>Deutsche Softwareversion</p>
-        </div>
-        <div class="stdbox">
-          <p>Willkommen,
-            <br/>
-            <?php
-            echo " ".$_SESSION["username"];
-            ?>
-          </p>
-          <p>Unterhalb können Einstellungen vorgenommen werden und verschiedene Mess-Clients aufgerufen werden.</p>
-        </div>
-
+      <div class="infobox">
+        <p>RaceDB Version 1.0 (Copyright (c) 2019 by Johannes Berndorfer)</p>
+        <p>Deutsche Softwareversion</p>
       </div>
-    </section>
+      <div class="stdbox">
+        <p>Willkommen,
+          <br />
+          <?php
+          echo " " . $_SESSION["username"];
+          ?>
+        </p>
+        <p>Unterhalb können Einstellungen vorgenommen werden und verschiedene Mess-Clients aufgerufen werden.</p>
+      </div>
 
-    <section id="menu_section">
-      <div class="stdcontainer">
+    </div>
+  </section>
 
-        <a href="./settings.php">
-          <div class="selectionbox">
-            <p>
-              <b>Administratoreinstellungen</b>
-            </p>
-          </div>
-        </a>
+  <section id="menu_section">
+    <div class="stdcontainer">
 
-        <a href="./edit_runs.php">
-          <div class="selectionbox">
-            <p>
-              <b>Läufe und Staffeln bearbeiten</b>
-            </p>
-          </div>
-        </a>
-
+      <a href="./settings.php">
         <div class="selectionbox">
           <p>
-            <b>Auswertung</b>
+            <b>Administratoreinstellungen</b>
           </p>
         </div>
+      </a>
 
-        <p>Messungs-Clients</p>
+      <a href="./edit_runs.php">
+        <div class="selectionbox">
+          <p>
+            <b>Läufe und Staffeln bearbeiten</b>
+          </p>
+        </div>
+      </a>
 
-        <a href="./client_start.php">
-          <div class="selectionbox">
-            <p>
-              <b>Laufstart</b>
-            </p>
-          </div>
-        </a>
+      <div class="selectionbox">
+        <p>
+          <b>Auswertung</b>
+        </p>
+      </div>
 
+      <p>Messungs-Clients</p>
+
+      <a href="./client_start.php">
+        <div class="selectionbox">
+          <p>
+            <b>Laufstart</b>
+          </p>
+        </div>
+      </a>
+
+      <a href="./client_stop.php">
         <div class="selectionbox">
           <p>
             <b>Zeitstopp</b>
           </p>
         </div>
+      </a>
 
-        <div class="selectionbox">
-          <p>
-            <b>UID-Aufnahme</b>
-          </p>
-        </div>
-
+      <div class="selectionbox">
+        <p>
+          <b>UID-Aufnahme</b>
+        </p>
       </div>
-    </section>
 
-    <?php
+    </div>
+  </section>
 
-    include __DIR__."/footer.php";
+  <?php
 
-    ?>
+  include __DIR__ . "/footer.php";
 
-  </body>
+  ?>
+
+</body>
+
 </html>

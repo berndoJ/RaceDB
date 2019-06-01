@@ -100,11 +100,11 @@
         <script type="application/javascript">
         setTimeout(function(){
             $("#NOTIFICATION-{rnd}").remove();
-        }, 7500);
+        }, {to});
         <\/script>
     </div>`;
 
-    function display_notification(type, html) {
-        $(".notification-panel ul").append(notification_template.replace("{type}", type).replace("{text}", html).replace(/\{rnd\}/g, Math.floor(Math.random() * 10000000)));
+    function display_notification(type, html, timeout = 7500) {
+        $(".notification-panel ul").append(notification_template.replace("{type}", type).replace("{text}", html).replace("{to}", timeout).replace(/\{rnd\}/g, Math.floor(Math.random() * 10000000)));
     }
 </script>

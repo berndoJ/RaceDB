@@ -373,6 +373,60 @@ function db_get_relayname_from_id($relayid)
 }
 
 /**
+ * Adds a new stopevent. The stop time is specified by the given utc time
+ * constant and the run, in which the stopevent shall be registered is specified
+ * by the given runid.
+ */
+function db_add_stopevent($runid, $utc)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Add the stopevent data row.
+    $sql_query = "INSERT INTO stopevents (runid, utc) VALUES (?, ?);";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "ii", $runid, $utc);
+    mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
+ * Deletes a stopevent specified by the given eventid.
+ */
+function db_delete_stopevent($eventid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Delete the stopevent.
+    $sql_query = "DELETE FROM stopevents WHERE id=?;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "i", $eventid);
+    mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
  * Creates a new runner with the given firstname, surname and runner uid and
  * associates the newly created runner with a relay by the given relayid.
  * 
