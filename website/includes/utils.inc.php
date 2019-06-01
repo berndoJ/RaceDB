@@ -319,6 +319,32 @@ function db_start_relay($relayid, $utc)
 }
 
 /**
+ * Deletes a relay start event specified by the given relay id.
+ */
+function db_delete_relay_start($relayid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Delete the relay start.
+    $sql_query = "DELETE FROM startevents WHERE relayid=?;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "i", $relayid);
+    mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
  * Gets the name of the relay given by the relayid.
  */
 function db_get_relayname_from_id($relayid)

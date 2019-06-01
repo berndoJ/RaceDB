@@ -68,9 +68,9 @@ while ($sql_row = mysqli_fetch_assoc($sql_result)) {
         . $start_utc
         . ")).toLocaleDateString(\"de-DE\", {weekday:\"short\",day:\"2-digit\",month:\"short\",year:\"numeric\",hour:\"2-digit\",minute:\"2-digit\",second:\"2-digit\"}));</script>"
         . "</td><td><span id=\"diff_label_"
-        . $relay_id
+        . $relay_id . $start_utc
         . "\"></span><script type=\"application/javascript\">setInterval(function(){ $(\"#diff_label_"
-        . $relay_id
+        . $relay_id . $start_utc
         . "\").html(__rst_ms_t(Date.now()-"
         . $start_utc
         . ")); }, 10);</script></td><td><ul><li><a onclick=\"delete_start_click("

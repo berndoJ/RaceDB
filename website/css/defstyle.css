@@ -134,6 +134,21 @@ button[disabled] {
   background-color: #999999;
 }
 
+/*Timing button style*/
+
+.tbutton {
+  background-color: #00cc00;
+  color: #ffffff;
+}
+
+.tbutton:hover {
+  background-color: #00b900;
+}
+
+.tbutton:active {
+  background-color: #00a500;
+}
+
 /*Default table class*/
 table.deftable {
   border-collapse: collapse;
@@ -213,7 +228,7 @@ table.deftable a:active {
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
 }
 
 @-webkit-keyframes animatetop {

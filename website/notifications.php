@@ -24,6 +24,36 @@
 
         .notification-body {
             padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-animation-name: animateright;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animateright;
+            animation-duration: 0.4s;
+        }
+
+        @-webkit-keyframes animateright {
+            from {
+                right: -500px;
+                opacity: 0
+            }
+
+            to {
+                right: 0;
+                opacity: 1
+            }
+        }
+
+        @keyframes animateright {
+            from {
+                right: -500px;
+                opacity: 0
+            }
+
+            to {
+                right: 0;
+                opacity: 1
+            }
         }
 
         .notification-body[type="error"] {
@@ -70,7 +100,7 @@
         <script type="application/javascript">
         setTimeout(function(){
             $("#NOTIFICATION-{rnd}").remove();
-        }, 5000);
+        }, 7500);
         <\/script>
     </div>`;
 
