@@ -632,3 +632,39 @@ function db_get_runner_info_from_id($runnerid)
     mysqli_close($db_conn);
     return $result;
 }
+
+/**
+ * Gets the difference of stopevents and stop acquisition data entries.
+ */
+function db_get_diff_stop_acqu($runid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Query the difference.
+    $sql_query = "SELECT (SELECT COUNT(*) FROM stopevents WHERE runid=?) - (SELECT COUNT(*) FROM stopacquisition WHERE runnerid IN (SELECT id FROM runners WHERE relayid IN (SELECT id FROM relays WHERE runid=?))) AS diff;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "ii", $runid, $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    $diff = 0;
+    if ($sql_row = mysqli_fetch_assoc($sql_result))
+    {
+        $diff = $sql_row["diff"];
+    }
+    else
+    {
+        return MSG_ERROR_SQL_GENERAL;
+    }
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS."\n".$diff;
+}

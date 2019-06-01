@@ -94,7 +94,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                             exec_stop_event();
                         });
                     });
-                            
+
                     function exec_stop_event() {
                         stop_utc = Date.now();
 
@@ -126,7 +126,39 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 </script>
 
                 <h3>Nicht zugeordnete Stopeinträge</h3>
-                <p><i>Momentan nicht zugeordnete Stoppeinträge: </i><b><span id="not_acquired_stopevents">JAVASCRIPT ERROR</span></b></p>
+                <p id="diff_stopevents_acquired"></p>
+                <script type="application/javascript">
+                    $(window).on("load", function() {
+                        update_diff_stop_acqu();
+
+                        setInterval(function() {
+                            update_diff_stop_acqu();
+                        }, 1000);
+                    });
+
+                    function update_diff_stop_acqu() {
+                        $.get("actions/get_diff_stop_acqu_ev.act.php", {
+                            runid: runid
+                        }, function(data) {
+                            data_sec = data.split("\n");
+                            if (data_sec[0] != RESPONSE_SUCCESS) {
+                                $("#diff_stopevents_acquired").html("<b>" + data[0] + "</b>")
+                            } else {
+                                cnt = data_sec[1];
+                                if (cnt > 0) {
+                                    $("#diff_stopevents_acquired").attr("style", "color: #f4bf42;");
+                                    $("#diff_stopevents_acquired").html("Momentan nicht zugeordnete Stoppeinträge: <b>" + cnt + "</b>");
+                                } else if (cnt < 0) {
+                                    $("#diff_stopevents_acquired").attr("style", "color: #c63221;");
+                                    $("#diff_stopevents_acquired").html("Momentan nicht getstoppte Zuordnungen: <b>" + cnt + "</b>");
+                                } else {
+                                    $("#diff_stopevents_acquired").attr("style", "color: #21c62f;");
+                                    $("#diff_stopevents_acquired").html("Alle Stoppeinträge wurden zugeordnet.");
+                                }
+                            }
+                        });
+                    }
+                </script>
 
                 <h3>Letzte Stopps</h3>
                 <table class="deftable" id="recent_stop_table"></table>
@@ -141,6 +173,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                         }, function(data) {
                             $("#recent_stop_table").html(data);
                         });
+                        update_diff_stop_acqu();
                     }
                 </script>
             </div>
