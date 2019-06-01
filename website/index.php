@@ -90,11 +90,13 @@ include __DIR__ . "/includes/requirelogin.inc.php";
         </div>
       </a>
 
-      <div class="selectionbox">
-        <p>
-          <b>UID-Aufnahme</b>
-        </p>
-      </div>
+      <a href="./client_stop_acquisition.php">
+        <div class="selectionbox">
+          <p>
+            <b>UID-Aufnahme</b>
+          </p>
+        </div>
+      </a>
 
     </div>
   </section>

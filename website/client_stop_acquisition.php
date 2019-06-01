@@ -19,6 +19,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
     <script type="application/javascript" src="./js/std_server_responses.js"></script>
     <script type="application/javascript" src="./js/std_notif_messages.js"></script>
     <script type="application/javascript">
+        var last_reg_ruid = null;
         const runid =
             <?php
             require_once __DIR__ . "/includes/utils.inc.php";
@@ -62,9 +63,9 @@ include __DIR__ . "/includes/requirelogin.inc.php";
         <section id="info_section">
             <div class="stdcontainer">
                 <div class="stdbox">
-                    <h3>Laufstopp-Client</h3>
+                    <h3>Läufer-UID-Aufnahme Client</h3>
                     <p>
-                        Client, welcher am Laufende platziert wird. Hier werden die individuellen Zeiten der Läufer gestoppt.
+                        Client, welcher am Laufende platziert wird. Hier werden alle Läufer, welche durch das Ziel gelaufen sind, anhand ihrer Läufer-UIDs in das System aufgenommen.
                     </p>
                     <p>
                         <b>Momentaner Lauf: </b>
@@ -85,45 +86,140 @@ include __DIR__ . "/includes/requirelogin.inc.php";
 
         <section id="main_section">
             <div class="stdcontainer">
-                <h3>Stoppen</h3>
-                <p><i>Jedes mal, wenn ein Läufer über die Ziellinie läuft, muss einmal gestoppt werden. Um Fehler zu vermeiden, muss gesichert werden, dass für jeden Läufer, der über die Ziellinie gelaufen ist, genau einmal gestoppt wurde.</i></p>
-                <button id="start_relays_button" class="tbutton" style="width: 100%; height: 100px; font-size: 30px;">Stopp</button>
-                <script type="application/javascript">
-                    $(window).on("load", function() {
-                        $("#start_relays_button").click(function() {
-                            exec_stop_event();
-                        });
-                    });
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <h3>UID-Aufnahme</h3>
+                            <p><i>Alle Läufer, welche über die Ziellinie gelaufen sind, müssen hier der Reihenfolge nach, in welcher sie durch das Ziel gelaufen sind, in das System aufgenommen werden.</i></p>
+                            <p>
+                                <b>Läufer-UID Aufnahme</b> <i>(Zum Absenden [Enter] drücken)</i><br />
+                                <input type="text" class="acquisition_input" id="runner_uid_acquisition" placeholder="Läufer-UID" />
+                                <script type="application/javascript">
+                                    $(window).on("load", function() {
+                                        $("#runner_uid_acquisition").keydown(function(e) {
+                                            if (e.keyCode == 13) {
+                                                exec_acquire();
+                                            }
+                                        });
 
-                    function exec_stop_event() {
-                        stop_utc = Date.now();
+                                        focus_acquisition_field();
+                                    });
 
-                        $.post("actions/stop_time.act.php", {
-                            runid: runid,
-                            utc: stop_utc
-                        }, function(data, status) {
-                            if (status != "success") {
-                                display_notification("error", NOTIFICATION_NO_CONNECTION);
-                                return;
-                            } else {
-                                data_sec = data.split("\n");
-                                switch (data_sec[0]) {
-                                    case RESPONSE_SUCCESS:
-                                        display_notification("success", "Der Läufer wurde gestoppt.", 2500);
-                                        break;
-                                    case RESPONSE_ERROR_SQL_NO_CONNECTION:
-                                        display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
-                                        break;
-                                    default:
-                                        display_notification_default(NOTIFICATION_UNKNOWN_RESPONSE);
-                                        console.log("Invalid response:\n" + data);
-                                        break;
+                                    function focus_acquisition_field() {
+                                        $("#runner_uid_acquisition").focus();
+                                    }
+
+                                    function exec_acquire() {
+                                        acqu_utc = Date.now();
+                                        runneruid = $("#runner_uid_acquisition").val().trim();
+                                        if (runneruid == "") {
+                                            return;
+                                        }
+
+                                        $.post("actions/acquire_runner.act.php", {
+                                            runid: runid,
+                                            runneruid: runneruid,
+                                            utc: acqu_utc
+                                        }, function(data, status) {
+                                            if (status != "success") {
+                                                display_notification("error", NOTIFICATION_NO_CONNECTION);
+                                                return;
+                                            } else {
+                                                data_sec = data.split("\n");
+                                                switch (data_sec[0]) {
+                                                    case RESPONSE_SUCCESS:
+                                                        display_notification("success", "Der Läufer wurde ins System aufgenommen.", 2500);
+                                                        last_reg_ruid = runneruid;
+                                                        break;
+                                                    case "ERR_INVALID_RUNNERUID":
+                                                        display_notification("error", "Die angegebene Läufer-UID existiert nicht.");
+                                                        break;
+                                                    case "ERR_ALREADY_ACQUIRED":
+                                                        display_notification("info", "Der angegebene Läufer wurde bereits ins System aufgenommen.");
+                                                        break;
+                                                    case RESPONSE_ERROR_SQL_NO_CONNECTION:
+                                                        display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
+                                                        break;
+                                                    default:
+                                                        display_notification_default(NOTIFICATION_UNKNOWN_RESPONSE);
+                                                        console.log("Invalid response:\n" + data);
+                                                        break;
+                                                }
+                                                $("#runner_uid_acquisition").val("");
+                                                update_recent_acquisitions_table();
+                                                update_last_time_ctr();
+                                                focus_acquisition_field();
+                                            }
+                                        });
+                                    }
+                                </script>
+                            </p>
+                        </td>
+                        <td style="width: 30%">
+                            <h3 style="float: right;">Zeit der letzten Aufnhame</h3>
+                            <p>
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td>
+                                            <span style="font-size: 40px; float: right;">
+                                                <span id="last_time_ctr_maj">--:--:--</span><span id="last_time_ctr_min" style="font-size: 18px;">.---</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span style="float: right;" id="last_time_ctr_ruid"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p>
+                            <script type="application/javascript">
+                                function update_last_time_ctr() {
+                                    if (last_reg_ruid == null) {
+                                        return;
+                                    }
+
+                                    $.get("actions/get_runner_time.act.php", {
+                                        runid: runid,
+                                        runneruid: last_reg_ruid
+                                    }, function(data) {
+                                        data_sec = data.split("\n");
+                                        if (data_sec[0] != RESPONSE_SUCCESS) {
+                                            return;
+                                        }
+                                        console.log(data_sec[1]);
+                                        maj = __ultc_ms_str(data_sec[1], true);
+                                        min = __ultc_ms_str(data_sec[1], false);
+                                        $("#last_time_ctr_maj").html(maj);
+                                        $("#last_time_ctr_min").html("." + min);
+                                        $("#last_time_ctr_ruid").html(last_reg_ruid);
+                                    });
                                 }
-                                update_recent_stop_table();
-                            }
-                        });
-                    }
-                </script>
+
+                                function __ultc_ms_str(s, t) {
+                                    // Pad to 2 or 3 digits, default is 2
+                                    function pad(n, z) {
+                                        z = z || 2;
+                                        return ('00' + n).slice(-z);
+                                    }
+
+                                    var ms = s % 1000;
+                                    s = (s - ms) / 1000;
+                                    var secs = s % 60;
+                                    s = (s - secs) / 60;
+                                    var mins = s % 60;
+                                    var hrs = (s - mins) / 60;
+
+                                    if (t == true) {
+                                        return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+                                    } else {
+                                        return pad(ms,3);
+                                    }
+                                }
+                            </script>
+                        </td>
+                    </tr>
+                </table>
 
                 <h3>Nicht zugeordnete Stopeinträge</h3>
                 <p id="diff_stopevents_acquired"></p>
@@ -160,19 +256,20 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                     }
                 </script>
 
-                <h3>Letzte Stopps</h3>
-                <table class="deftable" id="recent_stop_table"></table>
+                <h3>Letzte Läufer-UID Aufnahmen</h3>
+                <table class="deftable" id="recent_acquisitions_table"></table>
                 <script type="application/javascript">
                     $(window).on("load", function() {
-                        update_recent_stop_table();
+                        update_recent_acquisitions_table();
                     });
 
-                    function update_recent_stop_table() {
-                        $.get("html_factories/recent_stop_table.fac.php", {
+                    function update_recent_acquisitions_table() {
+                        $.get("html_factories/recent_acquisitions_table.fac.php", {
                             runid: runid
                         }, function(data) {
-                            $("#recent_stop_table").html(data);
+                            $("#recent_acquisitions_table").html(data);
                         });
+
                         update_diff_stop_acqu();
                     }
                 </script>

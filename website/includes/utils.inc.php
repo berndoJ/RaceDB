@@ -654,17 +654,172 @@ function db_get_diff_stop_acqu($runid)
     mysqli_stmt_execute($sql_stmt);
     $sql_result = mysqli_stmt_get_result($sql_stmt);
     $diff = 0;
-    if ($sql_row = mysqli_fetch_assoc($sql_result))
-    {
+    if ($sql_row = mysqli_fetch_assoc($sql_result)) {
         $diff = $sql_row["diff"];
-    }
-    else
-    {
+    } else {
         return MSG_ERROR_SQL_GENERAL;
     }
 
     // Close the database connection.
     mysqli_close($db_conn);
 
-    return MSG_SUCCESS."\n".$diff;
+    return MSG_SUCCESS . "\n" . $diff;
+}
+
+/**
+ * Adds a new acquisition event for a runner specified by the given runner-uid.
+ * The time of the acquisition is given by the utc variable, the run of the
+ * acquisition is specified by runid.
+ */
+function db_acquire_runner_by_ruid($runneruid, $utc, $runid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Check if runneruid exists
+    $sql_query = "SELECT id FROM runners WHERE runneruid = ? AND relayid IN (SELECT id FROM relays WHERE runid = ?);";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "si", $runneruid, $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    if (mysqli_num_rows($sql_result) < 1) {
+        return "ERR_INVALID_RUNNERUID";
+    }
+    mysqli_free_result($sql_result);
+
+    // Check if already acquired
+    $sql_query = "SELECT * FROM stopacquisition WHERE runnerid = (SELECT id FROM runners WHERE runneruid = ? AND relayid IN (SELECT id FROM relays WHERE runid = ?));";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "si", $runneruid, $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    if (mysqli_num_rows($sql_result) > 0) {
+        return "ERR_ALREADY_ACQUIRED";
+    }
+    mysqli_free_result($sql_result);
+
+    // Add the acquisition-event data row.
+    $sql_query =
+        "INSERT INTO
+        stopacquisition (
+            runnerid,
+            utc
+        )
+    VALUES (
+        (
+            SELECT
+                id
+            FROM
+                runners
+            WHERE
+                runneruid = ? AND
+                relayid
+                IN (
+                    SELECT
+                        id
+                    FROM
+                        relays
+                    WHERE
+                        runid = ?
+                )
+        ),
+        ?
+    );
+    ";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "sii", $runneruid, $runid, $utc);
+    mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
+ * Gets the final time of a runner specified by the given runneruid, within a
+ * run specified by runid.
+ */
+function db_get_runner_time($runneruid, $runid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Query the stopacquisition.
+    $sql_query = "SELECT runners.runneruid FROM stopacquisition INNER JOIN runners ON (runners.id = stopacquisition.runnerid) WHERE runnerid IN (SELECT id FROM runners WHERE relayid IN(SELECT id FROM relays WHERE runid=?))";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "i", $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    $ac_row = 0;
+    while ($sql_row = mysqli_fetch_assoc($sql_result)) {
+        if ($sql_row["runneruid"] == $runneruid) {
+            break;
+        }
+        $ac_row++;
+        if ($ac_row == mysqli_num_rows($sql_result)) {
+            return "ERR_NOT_ASSOCIATED";
+        }
+    }
+    mysqli_free_result($sql_result);
+
+    // Query the stoputcs.
+    $sql_query = "SELECT utc FROM stopevents WHERE runid = ?;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "i", $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    $sql_rows = [];
+    while ($sql_row = mysqli_fetch_assoc($sql_result)) {
+        $sql_rows[] = $sql_row;
+    }
+    if ($ac_row >= sizeof($sql_rows)) {
+        return "ERR_NO_STOPPED";
+    }
+    $stoputc = $sql_rows[$ac_row]["utc"];
+    mysqli_free_result($sql_result);
+
+    // Get the startutc
+    $sql_query = "SELECT utc FROM startevents WHERE relayid = (SELECT relayid FROM runners WHERE runneruid = ? AND relayid IN (SELECT id FROM relays WHERE runid = ?));";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "si", $runneruid, $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    $startutc = 0;
+    if ($sql_row = mysqli_fetch_assoc($sql_result)) {
+        $startutc = $sql_row["utc"];
+    } else {
+        return MSG_ERROR_SQL_GENERAL;
+    }
+
+    $time = $stoputc - $startutc;
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS . "\n" . $time;
 }

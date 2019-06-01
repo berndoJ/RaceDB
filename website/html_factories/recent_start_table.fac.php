@@ -33,25 +33,6 @@ if (mysqli_num_rows($sql_result) < 1) {
     exit;
 }
 
-// Inject time helper script.
-echo "<script type=\"application/javascript\">function __rst_ms_t(s) {
-
-    // Pad to 2 or 3 digits, default is 2
-    function pad(n, z) {
-      z = z || 2;
-      return ('00' + n).slice(-z);
-    }
-  
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = (s - mins) / 60;
-  
-    return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms);
-  }</script>";
-
 // Construct table html.
 while ($sql_row = mysqli_fetch_assoc($sql_result)) {
     $relay_id = $sql_row["relayid"];
@@ -79,6 +60,25 @@ while ($sql_row = mysqli_fetch_assoc($sql_result)) {
 
     echo $table_html;
 }
+
+// Inject time helper script.
+echo "<script type=\"application/javascript\">function __rst_ms_t(s) {
+
+    // Pad to 2 or 3 digits, default is 2
+    function pad(n, z) {
+      z = z || 2;
+      return ('00' + n).slice(-z);
+    }
+  
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+  
+    return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms,3);
+  }</script>";
 
 // Close database connection.
 mysqli_close($db_conn);

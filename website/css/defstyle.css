@@ -371,3 +371,10 @@ ul.horizontal_right_ul li {
   height: 44px;
   margin: 15px;
 }
+
+/*Acquisition field input style*/
+
+.acquisition_input {
+  font-family: Consolas;
+  font-size: 20px;
+}
