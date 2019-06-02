@@ -373,6 +373,34 @@ function db_get_relayname_from_id($relayid)
 }
 
 /**
+ * Gets the id of the relay given by its name and the runid.
+ */
+function db_get_relayid_from_name($relayname, $runid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    $sql_query = "SELECT id FROM relays WHERE name = ? AND runid = ?;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "si", $relayname, $runid);
+    mysqli_stmt_execute($sql_stmt);
+    $sql_result = mysqli_stmt_get_result($sql_stmt);
+    $relayname = MSG_ERROR_VARIABLES_INVALID;
+    if ($sql_row = mysqli_fetch_assoc($sql_result)) {
+        $relayname = MSG_SUCCESS . "\n" . $sql_row["id"];
+    }
+    mysqli_free_result($sql_result);
+    mysqli_close($db_conn);
+    return $relayname;
+}
+
+/**
  * Adds a new stopevent. The stop time is specified by the given utc time
  * constant and the run, in which the stopevent shall be registered is specified
  * by the given runid.

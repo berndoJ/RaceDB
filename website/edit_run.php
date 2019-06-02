@@ -75,6 +75,28 @@ if (!isset($_GET["runid"])) {
                 <button id="button_newrelay" style="margin: 0px 0px 10px 0px;">Neue Staffel</button>
                 <table class="deftable" id="relaytable"></table>
 
+                <h3>Läuferliste hochladen</h3>
+                <p>
+                    Um einfache Hinzufügung von großen Läufermengen zu ermöglichen,
+                    kann eine Läuferliste in form einer CSV-Datei hochgeladen wereden.
+                    Hierbei ist zu beachten, dass die Staffeln, denen die Läufer
+                    zugeordnet werden, vorher manuell erstellt werden müssen. <br/>
+                    Die CSV-Datei muss als Trennzeichen ';' verwenden und als
+                    Zeilenumbruch '\n', '\r' oder eine Kombination aus diesen Zeichen
+                    aufweisen. <br/>
+                    Die CSV-Datei muss eine Tabelle mit vier Spalten enthalten:<br/>
+                    <i>Vorname, Nachname, Läufer-UID, Staffelname</i><br/>
+                    Es ist zu beachten, dass der Staffelname exakt einem Staffelnamen
+                    einer bereits erstellten Staffel entsprechen muss, sonst wird der
+                    Läufer nicht hinzugefügt.
+                </p>
+                <form enctype="multipart/form-data" action="actions/upload_runner_cfg.act.php" method="POST">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+                    <input type="hidden" name="runid" value="<?php echo $_GET["runid"]; ?>" />
+                    Diese Datei hochladen: <input name="runnercfg" type="file" />
+                    <input type="submit" value="Datei Absenden" />
+                </form>
+
                 <h3>Läuferliste</h3>
                 <!--Script for runners-->
                 <script type="application/javascript">
