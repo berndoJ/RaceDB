@@ -31,8 +31,9 @@ include __DIR__ . "/includes/requirelogin.inc.php";
     <div class="stdcontainer">
 
       <div class="infobox">
-        <p>RaceDB Version 1.0 (Copyright (c) 2019 by Johannes Berndorfer)</p>
+        <p>RaceDB Version 2.2 (Copyright (c) 2019 by Johannes Berndorfer)</p>
         <p>Deutsche Softwareversion</p>
+        <p>Source Code: <a href="https://github.com/berndoJ/RaceDB">GitHub</a></p>
       </div>
       <div class="stdbox">
         <p>Willkommen,
