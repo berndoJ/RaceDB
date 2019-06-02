@@ -88,6 +88,30 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                 <h3>Auswertungstabelle Auswählen</h3>
                 <select id="eval_table_select">
                     <option value="all_runners">Alle Läuferzeiten</option>
+                    <?php
+                    // Open database connection.
+                    require_once __DIR__ . "/includes/db.inc.php";
+                    $db_conn = open_db_connection();
+                    if ($db_conn) {
+                        // Generate options
+                        $sql_query = "SELECT * FROM relays WHERE runid=?;";
+                        $sql_stmt = mysqli_stmt_init($db_conn);
+                        if (mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+                            mysqli_stmt_bind_param($sql_stmt, "i", $active_run);
+                            mysqli_stmt_execute($sql_stmt);
+                            $sql_result = mysqli_stmt_get_result($sql_stmt);
+                            while ($sql_row = mysqli_fetch_assoc($sql_result)) {
+                                $opt_id = $sql_row["id"];
+                                $opt_label = "Staffel " . $sql_row["name"];
+                                echo "<option value=\"$opt_id\">$opt_label</option>";
+                            }
+
+                            // Close database connection and clear result space.
+                            mysqli_free_result($sql_result);
+                            mysqli_close($db_conn);
+                        }
+                    }
+                    ?>
                 </select>
 
                 <h3>Auswertungstabelle</h3>
@@ -98,7 +122,11 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                         $("#download_table_btn").click(function() {
                             download_table();
                         });
-                        
+
+                        $("#eval_table_select").on("change", function(e) {
+                            update_eval_table();
+                        });
+
                         update_eval_table();
                     });
 
@@ -114,7 +142,16 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                                 });
                                 break;
                             default:
-                                $("#eval_table").html("<b>Auswahlfehler.</b>");
+                                if (isNaN(eval_table_selection)) {
+                                    $("#eval_table").html("<b>Auswahlfehler.</b>");
+                                } else {
+                                    $.get("html_factories/eval_table_relay.fac.php", {
+                                        runid: runid,
+                                        relayid: eval_table_selection
+                                    }, function(data) {
+                                        $("#eval_table").html(data);
+                                    });
+                                }
                                 break;
                         }
                     }
@@ -127,7 +164,11 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                                 window.location.href = "actions/download_eval_table_all_runners.act.php?runid=" + runid;
                                 break;
                             default:
-                                display_notification("error", "Auswahlfehler. Die Datei kann nicht heruntergeladen werden.");
+                                if (isNaN(eval_table_selection)) {
+                                    display_notification("error", "Auswahlfehler. Die Datei kann nicht heruntergeladen werden.");
+                                } else {
+                                    window.location.href = "actions/download_eval_table_relay.act.php?runid=" + runid + "&relayid=" + eval_table_selection;
+                                }
                                 break;
                         }
                     }

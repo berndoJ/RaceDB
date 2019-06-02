@@ -33,7 +33,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
       <div class="infobox">
         <p>RaceDB Version 2.2 (Copyright (c) 2019 by Johannes Berndorfer)</p>
         <p>Deutsche Softwareversion</p>
-        <p>Source Code: <a href="https://github.com/berndoJ/RaceDB">GitHub</a></p>
+        <p>Source Code: <a href="https://github.com/berndoJ/RaceDB" style="color: blue;">GitHub</a></p>
       </div>
       <div class="stdbox">
         <p>Willkommen,
