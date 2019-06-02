@@ -749,6 +749,32 @@ function db_acquire_runner_by_ruid($runneruid, $utc, $runid)
 }
 
 /**
+ * Deletes an acquisition event specified by the given eventid.
+ */
+function db_delete_acquisition_event($eventid)
+{
+    require_once __DIR__ . "/db.inc.php";
+    $db_conn = open_db_connection();
+    if (!$db_conn) {
+        return MSG_ERROR_SQL_NO_CONNECTION;
+    }
+
+    // Delete the event.
+    $sql_query = "DELETE FROM stopacquisition WHERE id = ?;";
+    $sql_stmt = mysqli_stmt_init($db_conn);
+    if (!mysqli_stmt_prepare($sql_stmt, $sql_query)) {
+        return MSG_ERROR_SQL_BAD_QUERY;
+    }
+    mysqli_stmt_bind_param($sql_stmt, "i", $eventid);
+    mysqli_stmt_execute($sql_stmt);
+
+    // Close the database connection.
+    mysqli_close($db_conn);
+
+    return MSG_SUCCESS;
+}
+
+/**
  * Gets the final time of a runner specified by the given runneruid, within a
  * run specified by runid.
  */

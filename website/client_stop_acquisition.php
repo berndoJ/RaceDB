@@ -276,14 +276,14 @@ include __DIR__ . "/includes/requirelogin.inc.php";
             </div>
         </section>
 
-        <!--Dialog for deleting a stop event-->
-        <div class="defmodal" id="dialog_delete_stop">
+        <!--Dialog for deleting an acquisition event-->
+        <div class="defmodal" id="dialog_delete_ae">
 
-            <!--Script for handling "Delete" button clicks in the action column of the recent stop table-->
+            <!--Script for handling "Delete" button clicks in the action column of the recent acquisitions table-->
             <script type="application/javascript">
-                function delete_stop_click(id) {
-                    delete_stop_id = id;
-                    $("#dialog_delete_stop").show();
+                function delete_acquisition_event(id) {
+                    delete_acquisition_event_id = id;
+                    $("#dialog_delete_ae").show();
                 }
             </script>
 
@@ -291,28 +291,28 @@ include __DIR__ . "/includes/requirelogin.inc.php";
             <script type="application/javascript">
                 $(window).on("load", function() {
                     // Close button
-                    $("#dialog_delete_stop_closebutton").click(function() {
-                        $("#dialog_delete_stop").hide();
+                    $("#dialog_delete_ae_closebutton").click(function() {
+                        $("#dialog_delete_ae").hide();
                     });
                     // Click outside the dialog bounds
-                    $("#dialog_delete_stop").click(function() {
-                        $("#dialog_delete_stop").hide();
+                    $("#dialog_delete_ae").click(function() {
+                        $("#dialog_delete_ae").hide();
                     }).children().click(function(e) {
                         e.stopPropagation();
                     });
                     // Cancel button
-                    $("#dialog_delete_stop_cancelbutton").click(function() {
-                        $("#dialog_delete_stop").hide();
+                    $("#dialog_delete_ae_cancelbutton").click(function() {
+                        $("#dialog_delete_ae").hide();
                     });
                     // Delete button
-                    $("#dialog_delete_stop_deletebutton").click(function() {
-                        exec_delete_stop();
+                    $("#dialog_delete_ae_deletebutton").click(function() {
+                        exec_delete_ac_event();
                     });
 
-                    // Function confirming the deletion of the stop event.
-                    function exec_delete_stop() {
-                        $.post("actions/delete_stop_event.act.php", {
-                            eventid: delete_stop_id
+                    // Function confirming the deletion of the acquisition event.
+                    function exec_delete_ac_event() {
+                        $.post("actions/delete_acquisition_event.act.php", {
+                            eventid: delete_acquisition_event_id
                         }, function(data, status) {
                             if (status != "success") {
                                 display_notification("error", NOTIFICATION_NO_CONNECTION);
@@ -321,7 +321,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                                 data_sec = data.split("\n");
                                 switch (data_sec[0]) {
                                     case RESPONSE_SUCCESS:
-                                        display_notification("success", "Der Stoppeintrag wurde erfolgreich gelöscht!");
+                                        display_notification("success", "Der Zuordnungseintrag wurde erfolgreich gelöscht!");
                                         break;
                                     case RESPONSE_ERROR_SQL_NO_CONNECTION:
                                         display_notification_default(NOTIFICATION_NO_SQL_CONNECTION);
@@ -331,8 +331,9 @@ include __DIR__ . "/includes/requirelogin.inc.php";
                                         console.log("Invalid response:\n" + data);
                                         break;
                                 }
-                                update_recent_stop_table();
-                                $("#dialog_delete_stop").hide();
+                                update_last_time_ctr();
+                                update_recent_acquisitions_table();
+                                $("#dialog_delete_ae").hide();
                             }
                         });
                     }
@@ -341,21 +342,21 @@ include __DIR__ . "/includes/requirelogin.inc.php";
 
             <div class="defmodal-content">
                 <div class="defmodal-header">
-                    <span class="defmodal-closebtn" id="dialog_delete_stop_closebutton">&times;</span>
-                    <h2>Stopeintrag löschen?</h2>
+                    <span class="defmodal-closebtn" id="dialog_delete_ae_closebutton">&times;</span>
+                    <h2>Zuordnung löschen?</h2>
                 </div>
                 <div class="defmodal-body">
                     <p>
-                        Soll der Stopeintrag wirklich gelöscht werden?
+                        Soll die Zuordnung gelöscht werden?
                     </p>
                 </div>
                 <div class="defmodal-footer">
                     <ul class="horizontal_right_ul">
                         <li>
-                            <button id="dialog_delete_stop_deletebutton">Löschen</button>
+                            <button id="dialog_delete_ae_deletebutton">Löschen</button>
                         </li>
                         <li>
-                            <button id="dialog_delete_stop_cancelbutton">Abbrechen</button>
+                            <button id="dialog_delete_ae_cancelbutton">Abbrechen</button>
                         </li>
                     </ul>
                 </div>
