@@ -10,7 +10,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
 <html>
 
 <head>
-    <title>RaceDB - Lauf Bearbeiten</title>
+    <title>RaceDB - Läufer-UID Aufnahme Client</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/no_link_style.css" />

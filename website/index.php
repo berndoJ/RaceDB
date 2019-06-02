@@ -66,11 +66,13 @@ include __DIR__ . "/includes/requirelogin.inc.php";
         </div>
       </a>
 
-      <div class="selectionbox">
-        <p>
-          <b>Auswertung</b>
-        </p>
-      </div>
+      <a href="./evaluation.php">
+        <div class="selectionbox">
+          <p>
+            <b>Laufauswertung</b>
+          </p>
+        </div>
+      </a>
 
       <p>Messungs-Clients</p>
 

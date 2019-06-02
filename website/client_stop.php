@@ -10,7 +10,7 @@ include __DIR__ . "/includes/requirelogin.inc.php";
 <html>
 
 <head>
-    <title>RaceDB - Lauf Bearbeiten</title>
+    <title>RaceDB - Zeitstopp Client</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/defstyle.css" />
     <link rel="stylesheet" href="./css/no_link_style.css" />
@@ -245,11 +245,11 @@ include __DIR__ . "/includes/requirelogin.inc.php";
             <div class="defmodal-content">
                 <div class="defmodal-header">
                     <span class="defmodal-closebtn" id="dialog_delete_stop_closebutton">&times;</span>
-                    <h2>Stopeintrag löschen?</h2>
+                    <h2>Stoppeintrag löschen?</h2>
                 </div>
                 <div class="defmodal-body">
                     <p>
-                        Soll der Stopeintrag wirklich gelöscht werden?
+                        Soll der Stoppeintrag wirklich gelöscht werden?
                     </p>
                 </div>
                 <div class="defmodal-footer">

@@ -849,3 +849,22 @@ function db_get_runner_time($runneruid, $runid)
 
     return MSG_SUCCESS . "\n" . $time;
 }
+
+/**
+ * Converts a time span (in milliseconds) to a human readable, HH:MM:SS.mmm time
+ * format.
+ */
+function utils_ms_to_format_str($t)
+{
+    $ms = $t % 1000;
+    $sec = floor(($t / 1000) % 60);
+    $min = floor(($t / (1000 * 60)) % 60);
+    $hrs = floor(($t / (1000 * 60 * 60)));
+
+    $ms = str_pad($ms, 3, "0", STR_PAD_LEFT);
+    $sec = str_pad($sec, 2, "0", STR_PAD_LEFT);
+    $min = str_pad($min, 2, "0", STR_PAD_LEFT);
+    $hrs = str_pad($hrs, 2, "0", STR_PAD_LEFT);
+
+    return "$hrs:$min:$sec.$ms";
+}
