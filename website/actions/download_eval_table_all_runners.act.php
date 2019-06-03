@@ -58,7 +58,7 @@ function _sort_runner_times_cb($a, $b)
     } else if ($b["time"] == null && $a["time"] == null) {
         return 1;
     }
-    return ($a["time"] >= $b["time"]) ? -1 : 1;
+    return ($a["time"] >= $b["time"]) ? 1 : -1;
 }
 usort($runner_times, "_sort_runner_times_cb");
 
